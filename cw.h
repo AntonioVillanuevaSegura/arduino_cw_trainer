@@ -33,4 +33,6 @@ String getCwCode(char caracter);
 void playCW (String cw);
 unsigned int calcularTimingCW(int wpm);
 const char* letreAleatorie(int intervale = 26) ;
+void erreurTone();
+void playMarioVictoryMelody();
 #endif

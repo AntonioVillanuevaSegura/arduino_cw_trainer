@@ -10,12 +10,17 @@ int freq(700);//Freq.Hz cw
 int menu(0);//menu lettres ou lettres + nombres
 char lettre ('/0');
 char c('/0');
-bool nouvelle(true);
+bool nouvelle(true);//Logique pour une nouvelle lettre CW
+//Total des lettres correctes et incorrectes
+int totale(0);
+int correctes(0);
+int incorrectes(0);  
+
 
 void setup() {
   initLcd();//initialiser le LCD
   Serial.begin(9600);
-  Serial.println("Start");
+  Serial.println("     if (!)Start");
 
   //keyboard USB init
   if (Usb.Init() == -1) {
@@ -56,20 +61,20 @@ void loop() {
   //Lettre Aleatoire , getCwCode, and playCW
   //Génère une lettre aléatoire que nous devons devine et Émets le CW
   if (nouvelle){
+   //printLcd (0,1,"                 ");
    lettre=*letreAleatorie(26);//Lecture d'une lettre aleatoire 
    playCW  (getCwCode(lettre));
   
-   printLcd (5,1,String (lettre)+"  ");//Debug
+   printLcd (9,1,String (lettre)+"  ");//DEBUG random
    nouvelle=false;
-   printLcd (8,1,"      ");
+   printLcd (10,1,"      ");
 
   }
   
-
   //while(!cw.isBuffer()){//Tant qu’aucune lettre n’est appuyée, il reste dans la boucle
 
     if (cw.isBuffer()){//Une touche a été appuyée ?
-      printLcd (8,1,"      ");
+      printLcd (9,1,"        ");
 
       c=cw.getBuffer()[0];//Get touche
       cw.clearBuffer();
@@ -85,19 +90,39 @@ void loop() {
       if (c==45){freq-=10;c = '\0'; setUpCw(mpm, freq);} //6 -
 
       if (c!='\0'){//PRINT TOUCHE LIGNE 1
-        printLcd (0,1,String(c)+"  ");
+        printLcd (0,1,String(c)+" ");
       }  
 
       if (c==lettre){
         nouvelle=true;
-        printLcd (8,1,"OK  ! ");
+        printLcd (10,1,"OK  !");
+        correctes++;
       }else if (c!='\0'){
-        printLcd (8,1,"NON !");
-        delay(1000);
-        printLcd (8,1,"     ");
+        printLcd (10,1,"NON !");
+        erreurTone();
+        printLcd (10,1,"      ");
 
         playCW  (getCwCode(lettre));//Erreur rePlay CW 
+        incorrectes++;
       }
+
+       if (c!='\0'){//Affiche score
+       totale++;
+        printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
+        if (correctes>=10){
+          correctes=0;
+          incorrectes=0;
+          playMarioVictoryMelody();
+                     //0123456789ABCDEF  
+          printLcd (0,1,"  NOUVEAU JEU    ");
+          delay(2000);
+          printLcd (0,1,"                 ");
+          printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
+          nouvelle =true;
+    
+
+        }
+      }  
 
 
     }
