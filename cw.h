@@ -5,7 +5,7 @@
 unsigned int punto = 167;//calcularTimingCW(mpm)
 int frecuencia =700; //Frecuencia CW 
 */
-#define SALIDA 6 //6->D3 arduino NANO
+#define SALIDA 3 //D3 arduino UNO
 
 //Creamos un diccionario KEY:VALUE donde cada signo  tiene su correspondencia CW
 extern const char* key1[];
@@ -27,6 +27,8 @@ extern const char* value1[] = {
   " "
 };
 */
+
+void setUpCw(unsigned int p, int f);
 String getCwCode(char caracter);
 void playCW (String cw);
 unsigned int calcularTimingCW(int wpm);

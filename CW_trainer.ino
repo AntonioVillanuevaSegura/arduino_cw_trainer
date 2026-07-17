@@ -27,6 +27,8 @@ void setup() {
   randomSeed(analogRead(A0));
   nouvelle=true;
 
+  setUpCw(mpm, freq);//Setup CW
+
 }
 
 void loop() {  
@@ -52,12 +54,14 @@ void loop() {
   //printLcd (5,1,String (letreAleatorie(26))+"   ");
 
   //Lettre Aleatoire , getCwCode, and playCW
+  //Génère une lettre aléatoire que nous devons devine et Émets le CW
   if (nouvelle){
    lettre=*letreAleatorie(26);//Lecture d'une lettre aleatoire 
    playCW  (getCwCode(lettre));
   
-   printLcd (5,1,String (lettre)+"   ");//Debug
+   printLcd (5,1,String (lettre)+"  ");//Debug
    nouvelle=false;
+   printLcd (8,1,"      ");
 
   }
   
@@ -65,26 +69,34 @@ void loop() {
   //while(!cw.isBuffer()){//Tant qu’aucune lettre n’est appuyée, il reste dans la boucle
 
     if (cw.isBuffer()){//Une touche a été appuyée ?
+      printLcd (8,1,"      ");
 
       c=cw.getBuffer()[0];//Get touche
       cw.clearBuffer();
 
       //MPM MENU FREQ
-      if (c=='&'){mpm++;c = '\0';} //1 &
-      if (c==126){mpm--;c = '\0';} //2 ~
+      if (c=='&'){mpm++;c = '\0'; setUpCw(mpm, freq);} //1 &
+      if (c==126){mpm--;c = '\0'; setUpCw(mpm, freq);} //2 ~
 
       if (c==35){menu++;c = '\0';} //3 #
       if (c==123){menu--;c = '\0';} //4 {  
 
-      if (c==40){freq+=10;c = '\0';} //5 (
-      if (c==45){freq-=10;c = '\0';} //6 -
+      if (c==40){freq+=10;c = '\0'; setUpCw(mpm, freq);} //5 (
+      if (c==45){freq-=10;c = '\0'; setUpCw(mpm, freq);} //6 -
 
       if (c!='\0'){//PRINT TOUCHE LIGNE 1
-        printLcd (0,1,String(c)+"   ");
+        printLcd (0,1,String(c)+"  ");
       }  
 
       if (c==lettre){
         nouvelle=true;
+        printLcd (8,1,"OK  ! ");
+      }else if (c!='\0'){
+        printLcd (8,1,"NON !");
+        delay(1000);
+        printLcd (8,1,"     ");
+
+        playCW  (getCwCode(lettre));//Erreur rePlay CW 
       }
 
 

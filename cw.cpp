@@ -19,6 +19,11 @@ const char* value1[] = {
   " "
 };
 
+void setUpCw(unsigned int p, int f){
+	punto=calcularTimingCW(p);
+	frecuencia=f;
+
+}
 // obtiene el codigo CW de un signo , p.e A retorna .-
 String getCwCode(char caracter) { 
 	Serial.print (caracter);//Debug caracter
@@ -38,6 +43,19 @@ String getCwCode(char caracter) {
 void playCW (String cw){
 	Serial.print("(" +cw+ ") ");
 	//Recorre el equivalente CW , puntos , rayas y espacios del CW
+
+	for (int index=0;index<cw.length();index++){
+		
+		if (cw.charAt(index) =='.'){tone(SALIDA, frecuencia);delay(punto); noTone(SALIDA); delay(punto );}//punto .
+		else if (cw.charAt(index) =='-'){tone(SALIDA, frecuencia);delay(punto * 3); noTone(SALIDA); delay(punto );}//raya _
+		else { delay(punto); }//Espacio	entre elementos punto raya
+		//delay( (punto * 2) );			
+	
+	}
+	delay (punto*3);
+
+
+	/*
 	for (int index=0;index<cw.length();index++){
 		
 		if (cw.charAt(index) =='.'){tone(SALIDA, frecuencia);delay(punto); noTone(SALIDA); delay(punto * 3);}//punto .
@@ -47,6 +65,7 @@ void playCW (String cw){
 	
 	}
 	delay (punto*2);
+	*/
 }
 
 //Calcula el tiempo de un punto en funcion de los WPM seleccionados
