@@ -1,5 +1,23 @@
 #include "cw.h"
-#include <Arduino.h>
+
+unsigned int punto = 167;//calcularTimingCW(mpm)
+int frecuencia =700; //Frecuencia CW 
+
+const char* key1[] = {
+  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+  "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+  "U", "V", "W", "X", "Y", "Z",
+  "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " "
+};
+
+const char* value1[] = {
+  ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
+  "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-",
+  "..-", "...-", ".--", "-..-", "-.--", "--..",
+  "-----", ".----", "..---", "...--", "....-", ".....", 
+  "-....", "--...", "---..", "----.", "-----",
+  " "
+};
 
 // obtiene el codigo CW de un signo , p.e A retorna .-
 String getCwCode(char caracter) { 
@@ -7,10 +25,10 @@ String getCwCode(char caracter) {
 	if (caracter==' '){return " ";}//Retorna espacio 
 
 	//Recorre la matriz de key creando indices 
-	for (int index=0;index<(sizeof(key)/sizeof(key[0]));index++){//Recorre key
+	for (int index=0;index<(sizeof(key1)/sizeof(key1[0]));index++){//Recorre key
 		
-		if ( key[index][0] ==  toupper(caracter) ){
-			return value[index];
+		if ( key1[index][0] ==  toupper(caracter) ){
+			return value1[index];
 		}
 	}
 	return "";
@@ -34,4 +52,12 @@ void playCW (String cw){
 //Calcula el tiempo de un punto en funcion de los WPM seleccionados
 unsigned int calcularTimingCW(int wpm) {
   return (unsigned int)(1320.0 / wpm);
+}
+
+//Retourne une lettre aleatorie
+//const char* letreAleatorie(int intervale = 26) { //26 lettres o 36 lettres + nombres
+const char* letreAleatorie(int intervale = 26) { //26 lettres o 36 lettres + nombres
+
+	return key1[ random(0, intervale) ];
+
 }
