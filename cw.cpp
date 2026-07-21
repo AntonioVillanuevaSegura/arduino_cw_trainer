@@ -8,7 +8,7 @@ int totale=0;
 int correctes=0;
 int incorrectes=0;
 
-unsigned int punto = 167;//calcularTimingCW(mpm)
+unsigned int point = 167;//calcularTimingCW(mpm)
 int frecuencia =700; //Frecuencia CW 
 
 const char* key1[] = {
@@ -28,11 +28,11 @@ const char* value1[] = {
 };
 
 void setUpCw(unsigned int p, int f){
-	punto=calcularTimingCW(p);
+	point=calcularTimingCW(p);
 	frecuencia=f;
 
 }
-// obtiene el codigo CW de un signo , p.e A retorna .-
+// obtient le code CW d'un signe, par exemple A renvoie .-
 String getCwCode(char caracter) { 
 	Serial.print (caracter);//Debug caracter
 	if (caracter==' '){return " ";}//Retorna espacio 
@@ -47,52 +47,39 @@ String getCwCode(char caracter) {
 	return "";
 }
 
-//Play sonido CW ,del simbolo 
+//Joue le son CW à partir du symbole
 void playCW (String cw){
 	Serial.print("(" +cw+ ") ");
-	//Recorre el equivalente CW , puntos , rayas y espacios del CW
+	//Parcour l'équivalent CW, les points, les tirets et les espaces de CW.
 
 	for (int index=0;index<cw.length();index++){
 		
-		if (cw.charAt(index) =='.'){tone(SALIDA, frecuencia);delay(punto); noTone(SALIDA); delay(punto );}//punto .
-		else if (cw.charAt(index) =='-'){tone(SALIDA, frecuencia);delay(punto * 3); noTone(SALIDA); delay(punto );}//raya _
-		else { delay(punto); }//Espacio	entre elementos punto raya
-		//delay( (punto * 2) );			
+		if (cw.charAt(index) =='.'){tone(AUDIO, frecuencia);delay(point); noTone(AUDIO); delay(point );}//point.
+		else if (cw.charAt(index) =='-'){tone(AUDIO, frecuencia);delay(point * 3); noTone(AUDIO); delay(point );}//tiret
+		else { delay(point); }//Espace entre les éléments point & tirets		
 	
 	}
-	delay (punto*3);
-
-
-	/*
-	for (int index=0;index<cw.length();index++){
-		
-		if (cw.charAt(index) =='.'){tone(SALIDA, frecuencia);delay(punto); noTone(SALIDA); delay(punto * 3);}//punto .
-		else if (cw.charAt(index) =='-'){tone(SALIDA, frecuencia);delay(punto * 3); noTone(SALIDA); delay(punto / 2);}//raya _
-		else { delay(punto); }//Espacio	entre elementos punto raya
-		delay( (punto * 2) );			
-	
-	}
-	delay (punto*2);
-	*/
+	delay (point*3);
 }
 
-//Calcula el tiempo de un punto en funcion de los WPM seleccionados
+//Calcula el tiempo de un point en funcion de los WPM seleccionados
 unsigned int calcularTimingCW(int wpm) {
   return (unsigned int)(1320.0 / wpm);
 }
 
 //Retourne une lettre aleatorie
-//const char* letreAleatorie(int intervale = 26) { //26 lettres o 36 lettres + nombres
 const char* letreAleatorie(int intervale = 26) { //26 lettres o 36 lettres + nombres
 
 	return key1[ random(0, intervale) ];
 
 }
 
+//ton d'erreur quand on fait une erreur
 void erreurTone(){
-	tone(SALIDA, 100);delay(300); noTone(SALIDA);
+	tone(AUDIO, 100);delay(300); noTone(AUDIO);
 }
 
+//La mélodie de Mario Bros quand on a gagné
 void playMarioVictoryMelody() {
   int melody[] = {
     NOTE_E4, NOTE_G4, NOTE_E5, NOTE_C5, NOTE_D5, NOTE_G4
@@ -104,12 +91,13 @@ void playMarioVictoryMelody() {
   };
 
   for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
-    tone(SALIDA, melody[i], durations[i]);
+    tone(AUDIO, melody[i], durations[i]);
     delay(durations[i] * 1.3);
-    noTone(SALIDA);
+    noTone(AUDIO);
   }
 }
 
+//La mélodie de Mario Bros quand on perd
 void playMarioGameOverMelody() {
   // Notas para la melodía de "Game Over" de Mario
   int melody[] = {
@@ -124,12 +112,13 @@ void playMarioGameOverMelody() {
 
   // Reproducir la melodía
   for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
-    tone(SALIDA, melody[i], durations[i]);
+    tone(AUDIO, melody[i], durations[i]);
     delay(durations[i] * 1.3); // Pausa entre notas
-    noTone(SALIDA);
+    noTone(AUDIO);
   }
 }
 
+//Fonction qui définit le jeu classique
 void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
 
   //Lettre Aleatoire obtien le code CW  getCwCode et playCW
