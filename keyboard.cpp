@@ -60,4 +60,22 @@ CW cw;
 
     }    
 
+    void CW::debugKeyboard(){
+      if (CW::isBuffer()){
+        char c =CW::getBuffer()[0];
+        CW::clearBuffer();
+        printLcd (0,0,String (c));
+        printLcd(0, 1, String((unsigned char) (c )));
+        Serial.println((unsigned char) (c ));
+   
+      }
+    }
+
+    void CW::printSetup(int mpm,int freq,int menu, int correctes,int incorrectes){
+      printLcd (0,0,"MPM:" +String(mpm)+"   ");
+      printLcd (7,0,"F"+String(freq)+"   ");
+      printLcd (12,0,"M:"+String(menu)+"   ");
+      printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
+
+    }
 

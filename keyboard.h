@@ -6,6 +6,8 @@
 #include <usbhub.h>
 #include <SPI.h>
 
+#include "ecran.h"
+
 class CW: public KeyboardReportParser {
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key);
@@ -17,6 +19,8 @@ class CW: public KeyboardReportParser {
     bool isBuffer() ;   
     char* getBuffer();
     void clearBuffer() ;
+    void debugKeyboard();  
+    void printSetup(int mpm,int freq,int menu, int correctes,int incorrectes);
   
   private:  
     void CW::conversionAzerty(char *c);
