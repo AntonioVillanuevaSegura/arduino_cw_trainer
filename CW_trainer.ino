@@ -12,6 +12,7 @@ char lettre ('/0');
 char c('/0');
 bool nouvelle(true);//Logique pour une nouvelle lettre CW
 //Total des lettres correctes et incorrectes
+#define MAX_JEU 10 //Nombre maximal de lettres par jeu  ou constexpr int MAX = 10; c++11 !!
 int totale(0);
 int correctes(0);
 int incorrectes(0);  
@@ -55,10 +56,9 @@ void loop() {
   printLcd (0,0,"MPM:" +String(mpm)+"   ");
   printLcd (7,0,"F"+String(freq)+"   ");
   printLcd (12,0,"M:"+String(menu)+"   ");
+  printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
 
-  //printLcd (5,1,String (letreAleatorie(26))+"   ");
-
-  //Lettre Aleatoire , getCwCode, and playCW
+  //Lettre Aleatoire obtien le code CW  getCwCode et playCW
   //Génère une lettre aléatoire que nous devons devine et Émets le CW
   if (nouvelle){
    //printLcd (0,1,"                 ");
@@ -68,10 +68,10 @@ void loop() {
    printLcd (9,1,String (lettre)+"  ");//DEBUG random
    nouvelle=false;
    printLcd (10,1,"      ");
+   totale++;//une nouvelle lettre
 
   }
-  
-  //while(!cw.isBuffer()){//Tant qu’aucune lettre n’est appuyée, il reste dans la boucle
+  while (!cw.isBuffer()){Usb.Task();}
 
     if (cw.isBuffer()){//Une touche a été appuyée ?
       printLcd (9,1,"        ");
@@ -109,24 +109,32 @@ void loop() {
        if (c!='\0'){//Affiche score
        totale++;
         printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
-        if (correctes>=10){
-          correctes=0;
-          incorrectes=0;
-          playMarioVictoryMelody();
+        if (totale>=MAX_JEU ){//A atteint le nombre maximal de lettres ?
+          if ((correctes*100/totale)>=50){
+            printLcd (0,1,"VOUS AVEZ GAGNE!");
+            playMarioVictoryMelody();//Winner
+          }else{
+            printLcd (0,1,"VOUS AVEZ PERDU ");
+            playMarioGameOverMelody();//Game over Mario
+          }
                      //0123456789ABCDEF  
-          printLcd (0,1,"  NOUVEAU JEU    ");
-          delay(2000);
+          printLcd (0,1,"NEW GAME ENTER  ");
+
+          cw.clearBuffer();
+          while (!cw.isBuffer()){Usb.Task();delay(500);}//WAIT FOR new game
+          cw.clearBuffer();//Elimine ENTER
+
           printLcd (0,1,"                 ");
           printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
-          nouvelle =true;
+          //Reset
+          nouvelle =true;//nouvelle lettre aleatoire
+          totale=0;
+          correctes=0;
+          incorrectes=0;
     
-
         }
       }  
-
-
     }
 
-  //}
   
 }
