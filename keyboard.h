@@ -1,3 +1,5 @@
+//Gestion d'un clavier USB dans Arduino Hôte USB 
+//https://www.amazon.fr/dp/B0C8TNZ1QQ?ref=ppx_yo2ov_dt_b_fed_asin_title
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 #include <ctype.h> //toupper(c)

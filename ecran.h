@@ -1,3 +1,4 @@
+//Gestion de l'affichage graphique LCD1602A
 #ifndef ECRAN_H
 #define ECRAN_H
 
