@@ -124,7 +124,9 @@ void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
   //Lettre Aleatoire obtien le code CW  getCwCode et playCW
   //Génère une lettre aléatoire que nous devons devine et Émets le CW
   if (nouvelle){
-   lettre=*letreAleatorie(26);//Lecture d'une lettre aleatoire 
+		//Lecture d'une lettre aleatoire 
+   if (menu==1) {lettre=*letreAleatorie(36);}//lettres + nombres
+	 else {lettre=*letreAleatorie(26);}//lettres
    playCW  (getCwCode(lettre));
   
    printLcd (9,1,String (lettre)+"  ");//DEBUG random
@@ -151,8 +153,7 @@ void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
       if (c==45){freq-=10;c = '\0'; setUpCw(mpm, freq);} //6 -
 
       if (c!='\0'){//PRINT TOUCHE LIGNE 1
-        printLcd (0,1,String(c)+" ");
-        
+        printLcd (0,1,String(c)+" ");        
       }  
 
       if (c==lettre){
@@ -161,17 +162,13 @@ void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
         correctes++;
 
       }else if (c!='\0'){
-
-        //printLcd (10,1,"NON ="+c);
         printLcd (10,1,"NON !");
         erreurTone();
         printLcd (10,1,"      ");
 
         playCW  (getCwCode(lettre));//Erreur rePlay CW 
-        incorrectes++;
-       
+        incorrectes++;       
         nouvelle =true;//nouvelle lettre aleatoire
-
       }
 
        if (c!='\0'){//Il s'agit d'une touche d'entrée pour le jeu
@@ -190,11 +187,11 @@ void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
 
           cw.clearBuffer();
           while (!cw.isBuffer()){Usb.Task();delay(500);}//Attends une touche pour démarrer une nouvelle partie
-          cw.clearBuffer();//Elimine ENTER dans le buffer
+          cw.clearBuffer();//Elimine touche ...ENTER dans le buffer
 
           printLcd (0,1,"                 ");
           printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
-          //Reset .Effacer les variables d'une nouvelle partie
+          //Reset .Efface les variables d'une nouvelle partie
           nouvelle =true;//nouvelle lettre aleatoire
           totale=0;
           correctes=0;
