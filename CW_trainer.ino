@@ -17,7 +17,6 @@ int totale(0);
 int correctes(0);
 int incorrectes(0);  
 
-
 void setup() {
   initLcd();//initialiser le LCD
   Serial.begin(9600);
@@ -28,7 +27,9 @@ void setup() {
     Serial.println("USB init failed");
     while (1) {}
   }
+
   HidKeyboard.SetReportParser(0, &cw);
+  delay(500);  
   //nombres aleatoires 
   randomSeed(analogRead(A0));
   nouvelle=true;
@@ -38,30 +39,14 @@ void setup() {
 }
 
 void loop() {  
-  //printLcd(0,0,"FFFFxx");
   Usb.Task();
-  //Debug KEYBOARD LCD
- /*
-  if (cw.isBuffer()){
-    char c =cw.getBuffer()[0];
-    cw.clearBuffer();
-    printLcd (0,0,String (c));
-    printLcd(0, 1, String((unsigned char) (c ))); // Más legible y equivalent
-    Serial.println((unsigned char) (c ));
-  
-  }
-  */
 
   //PRINT SETUP 
-  printLcd (0,0,"MPM:" +String(mpm)+"   ");
-  printLcd (7,0,"F"+String(freq)+"   ");
-  printLcd (12,0,"M:"+String(menu)+"   ");
-  printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
+  cw.printSetup( mpm,freq,menu, correctes,incorrectes);//ligne supérieure
 
   //Lettre Aleatoire obtien le code CW  getCwCode et playCW
   //Génère une lettre aléatoire que nous devons devine et Émets le CW
   if (nouvelle){
-   //printLcd (0,1,"                 ");
    lettre=*letreAleatorie(26);//Lecture d'une lettre aleatoire 
    playCW  (getCwCode(lettre));
   
@@ -69,9 +54,10 @@ void loop() {
    nouvelle=false;
    printLcd (10,1,"      ");
    totale++;//une nouvelle lettre
-
+    
   }
-  while (!cw.isBuffer()){Usb.Task();}
+
+  //while (!cw.isBuffer()){Usb.Task();}
 
     if (cw.isBuffer()){//Une touche a été appuyée ?
       printLcd (9,1,"        ");
@@ -113,9 +99,9 @@ void loop() {
 
       }
 
-       if (c!='\0'){//Affiche score
-
+       if (c!='\0'){//Il s'agit d'une touche d'entrée pour le jeu
         printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
+
         if (totale>=MAX_JEU ){//A atteint le nombre maximal de lettres ?
           if ((correctes*100.0/totale)>=90){
             printLcd (0,1,"VOUS AVEZ GAGNE!");
@@ -124,16 +110,16 @@ void loop() {
             printLcd (0,1,"VOUS AVEZ PERDU ");
             playMarioGameOverMelody();//Game over Mario
           }
-                     //0123456789ABCDEF  
+ 
           printLcd (0,1,"NEW GAME ENTER  ");
 
           cw.clearBuffer();
-          while (!cw.isBuffer()){Usb.Task();delay(500);}//WAIT FOR new game
-          cw.clearBuffer();//Elimine ENTER
+          while (!cw.isBuffer()){Usb.Task();delay(500);}//Attends une touche pour démarrer une nouvelle partie
+          cw.clearBuffer();//Elimine ENTER dans le buffer
 
           printLcd (0,1,"                 ");
           printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
-          //Reset
+          //Reset .Effacer les variables d'une nouvelle partie
           nouvelle =true;//nouvelle lettre aleatoire
           totale=0;
           correctes=0;
