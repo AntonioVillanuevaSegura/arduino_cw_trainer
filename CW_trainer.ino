@@ -91,26 +91,33 @@ void loop() {
 
       if (c!='\0'){//PRINT TOUCHE LIGNE 1
         printLcd (0,1,String(c)+" ");
+        
       }  
 
       if (c==lettre){
         nouvelle=true;
         printLcd (10,1,"OK  !");
         correctes++;
+
       }else if (c!='\0'){
+
+        //printLcd (10,1,"NON ="+c);
         printLcd (10,1,"NON !");
         erreurTone();
         printLcd (10,1,"      ");
 
         playCW  (getCwCode(lettre));//Erreur rePlay CW 
         incorrectes++;
+       
+        nouvelle =true;//nouvelle lettre aleatoire
+
       }
 
        if (c!='\0'){//Affiche score
-       totale++;
+
         printLcd (2,1,String (correctes)+":"+String (incorrectes)+"  ");
         if (totale>=MAX_JEU ){//A atteint le nombre maximal de lettres ?
-          if ((correctes*100/totale)>=50){
+          if ((correctes*100.0/totale)>=90){
             printLcd (0,1,"VOUS AVEZ GAGNE!");
             playMarioVictoryMelody();//Winner
           }else{
