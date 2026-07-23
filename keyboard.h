@@ -10,7 +10,7 @@
 
 #include "ecran.h"
 
-class CW: public KeyboardReportParser {
+class KeyboardUSB: public KeyboardReportParser {
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key);
     void OnKeyUp(uint8_t mod, uint8_t key);
@@ -25,7 +25,7 @@ class CW: public KeyboardReportParser {
     void printSetup(int mpm,int freq,int menu, int correctes,int incorrectes);
   
   private:  
-    void CW::conversionAzerty(char *c);
+    void KeyboardUSB::conversionAzerty(char *c);
     char c;//Simple char
     char buffer[32];      // Buffer para acumular teclas
     int bufferIndex;      // Índice del buffer 
@@ -36,6 +36,6 @@ class CW: public KeyboardReportParser {
 
 extern USB Usb;
 extern HIDBoot<USB_HID_PROTOCOL_KEYBOARD> HidKeyboard;
-extern CW cw;
+extern KeyboardUSB keyboard_usb;
 
 #endif

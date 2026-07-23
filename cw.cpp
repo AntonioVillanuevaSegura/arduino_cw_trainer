@@ -119,7 +119,7 @@ void playMarioGameOverMelody() {
 }
 
 //Fonction qui définit le jeu classique
-void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu){
+void jeuCW1 (KeyboardUSB& cw,int& mpm, int& freq, int& menu){
 
   //Lettre Aleatoire obtien le code CW  getCwCode et playCW
   //Génère une lettre aléatoire que nous devons devine et Émets le CW

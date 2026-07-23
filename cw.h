@@ -47,5 +47,5 @@ const char* letreAleatorie(int intervale = 26) ;
 void erreurTone();
 void playMarioVictoryMelody();
 void playMarioGameOverMelody();
-void jeuCW1 (CW& cw,int& mpm, int& freq, int& menu);
+void jeuCW1 (KeyboardUSB& cw,int& mpm, int& freq, int& menu);
 #endif

@@ -20,7 +20,8 @@ void setup() {
     while (1) {}
   }
 
-  HidKeyboard.SetReportParser(0, &cw);
+
+  HidKeyboard.SetReportParser(0, &keyboard_usb);
   delay(500);  
   //nombres aleatoires 
   randomSeed(analogRead(A0));
@@ -33,9 +34,9 @@ void loop() {
   Usb.Task();
 
   //PRINT SETUP 
-  cw.printSetup( mpm,freq,menu, correctes,incorrectes);//ligne supérieure
+  keyboard_usb.printSetup( mpm,freq,menu, correctes,incorrectes);//ligne supérieure
 
-  jeuCW1 (cw,mpm, freq, menu);//Fonction qui définit le jeu classique
+  jeuCW1 (keyboard_usb,mpm, freq, menu);//Fonction qui définit le jeu classique
 
   
 }

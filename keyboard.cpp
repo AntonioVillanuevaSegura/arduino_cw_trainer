@@ -2,19 +2,19 @@
 
 USB Usb;
 HIDBoot<USB_HID_PROTOCOL_KEYBOARD> HidKeyboard(&Usb);
-CW cw;
+KeyboardUSB keyboard_usb;
 
-    void CW::OnKeyDown(uint8_t mod, uint8_t key) {
+    void KeyboardUSB::OnKeyDown(uint8_t mod, uint8_t key) {
       Serial.print("DN ");
       uint8_t c = OemToAscii(mod, key);
       if (c) OnKeyPressed(c);
     }
 
-    void CW::OnKeyUp(uint8_t mod, uint8_t key) {
+    void KeyboardUSB::OnKeyUp(uint8_t mod, uint8_t key) {
       Serial.print("UP ");
     }
 
-    void CW::OnKeyPressed(uint8_t key) {
+    void KeyboardUSB::OnKeyPressed(uint8_t key) {
       char c=toupper ((char)key);
       conversionAzerty( &c);
       if (bufferIndex < sizeof(buffer) - 1) {
@@ -25,15 +25,15 @@ CW cw;
   
     }
 
-    bool CW::isBufferFull() {return bufferIndex >= sizeof(buffer) - 1;}
-    bool CW::isBuffer() {return bufferIndex >0;}   
-    char* CW::getBuffer() { return buffer; }
-    void CW::clearBuffer() {
+    bool KeyboardUSB::isBufferFull() {return bufferIndex >= sizeof(buffer) - 1;}
+    bool KeyboardUSB::isBuffer() {return bufferIndex >0;}   
+    char* KeyboardUSB::getBuffer() { return buffer; }
+    void KeyboardUSB::clearBuffer() {
       bufferIndex = 0;
       memset(buffer, 0, sizeof(buffer));
     } 
 
-    void CW::conversionAzerty(char *c){
+    void KeyboardUSB::conversionAzerty(char *c){
       //Fonction pour adapter à un clavier français
       if (*c=='Q'){*c='A';return; }
       if (*c=='A'){*c= 'Q';return;}
@@ -60,10 +60,10 @@ CW cw;
 
     }    
 
-    void CW::debugKeyboard(){
-      if (CW::isBuffer()){
-        char c =CW::getBuffer()[0];
-        CW::clearBuffer();
+    void KeyboardUSB::debugKeyboard(){
+      if (KeyboardUSB::isBuffer()){
+        char c =KeyboardUSB::getBuffer()[0];
+        KeyboardUSB::clearBuffer();
         printLcd (0,0,String (c));
         printLcd(0, 1, String((unsigned char) (c )));
         Serial.println((unsigned char) (c ));
@@ -71,7 +71,7 @@ CW cw;
       }
     }
 
-    void CW::printSetup(int mpm,int freq,int menu, int correctes,int incorrectes){
+    void KeyboardUSB::printSetup(int mpm,int freq,int menu, int correctes,int incorrectes){
       printLcd (0,0,"MPM:" +String(mpm)+"   ");
       printLcd (7,0,"F"+String(freq)+"   ");
       printLcd (12,0,"M:"+String(menu)+"   ");
