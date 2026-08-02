@@ -1,0 +1,26 @@
+Arduino UNO
+    MOSI → D11
+    MISO → D12
+    SCK → D13
+    SS / CS → D10
+    INT → D9
+    RST → D8 o RESET 
+    5V → 5V
+    GND → GND
+
+nano
+D11 → MOSI
+D12 → MISO
+D13 → SCK
+D10 → SS/CS
+D9 → INT
+D8 o RESET 
+
+
+MOSI → D11
+MISO → D12
+SCK → D13
+SS / CS → D10
+INT → D9
+5V → 5V
+GND → GND

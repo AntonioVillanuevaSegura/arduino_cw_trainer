@@ -5,7 +5,8 @@
 #include "ecran.h"
 #include "keyboard.h"
 
-#define AUDIO 3 //D3 arduino UNO , sortie audio
+#define AUDIO 14 //D14 arduino UNO , sortie audio
+//#define AUDIO 3 //D3 arduino UNO , sortie audio
 #define MAX_JEU 10 //Nombre maximal de lettres par jeu  ou constexpr int MAX = 10; c++11 !!
 extern bool nouvelle;
 extern char lettre;

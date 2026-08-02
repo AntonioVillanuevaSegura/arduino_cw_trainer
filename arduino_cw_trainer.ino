@@ -17,6 +17,8 @@ void setup() {
   //keyboard USB init
   if (Usb.Init() == -1) {
     Serial.println("USB init failed");
+    lcd.setCursor(0, 0);
+    lcd.print("USB init failed");
     while (1) {}
   }
 
